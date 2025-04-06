@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>OSM Map Picker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+rqg5J7Zf3sYl5c+g3zzJqJ9bE3rd/85L+ZwP/0kM="
+    crossorigin=""
+  />
+  <style>
+    html, body { height: 100%; margin: 0; }
+    #map { height: 90vh; width: 100%; }
+    #coords { padding: 10px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div id="coords">Click the map to get coordinates.</div>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-pMfZH1zS+kGHlh+bK5Xoe0JCz9blKUlEnzvOAy1r+Hc="
+    crossorigin="">
+  </script>
+  <script>
+    const map = L.map('map').setView([39.8283, -98.5795], 4); // Centered on USA
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    let marker;
+
+    map.on('click', function(e) {
+      if (marker) map.removeLayer(marker);
+      marker = L.marker(e.latlng).addTo(map);
+
+      const { lat, lng } = e.latlng;
+      document.getElementById('coords').innerText =
+        `Latitude: ${lat.toFixed(6)}, Longitude: ${lng.toFixed(6)}`;
+    });
+  </script>
+</body>
+</html>
